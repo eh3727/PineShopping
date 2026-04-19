@@ -1,0 +1,270 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{background:#F5F0E8;border-radius:12px;overflow:hidden;font-family:var(--font-sans);color:#1a1a1a;min-height:580px;display:flex;flex-direction:column}
+.header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:0.5px solid rgba(0,0,0,0.07)}
+.logo{font-family:var(--font-serif);font-size:17px;color:#2d5a3f;letter-spacing:0.3px}
+.nav-center{font-size:11px;letter-spacing:2px;color:#2d5a3f}
+.header-icons{display:flex;gap:14px;font-size:13px;color:#2d5a3f}
+.body{flex:1;display:grid;grid-template-columns:200px 1fr;overflow:hidden}
+.left{padding:20px 16px;border-right:0.5px solid rgba(0,0,0,0.06)}
+.pine-status{font-size:10px;letter-spacing:1.5px;color:#2d5a3f;margin-bottom:10px}
+.query{font-family:var(--font-serif);font-style:italic;font-size:14px;line-height:1.5;color:#3a3a3a;margin-bottom:18px}
+.orb-wrap{display:flex;flex-direction:column;align-items:center;gap:10px}
+.orb{width:52px;height:52px;border-radius:50%;background:#2d5a3f;display:flex;align-items:center;justify-content:center}
+.orb-ring{width:26px;height:26px;border-radius:50%;border:2px solid rgba(255,255,255,0.4)}
+.orb-btns{display:flex;gap:14px;font-size:9px;letter-spacing:1.2px;color:#777}
+.right{display:flex;flex-direction:column;overflow:hidden}
+.results-area{flex:1;padding:18px 20px;overflow-y:auto}
+.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.section-label{font-size:10px;letter-spacing:1.8px;color:#2d5a3f}
+.section-count{font-size:10px;color:#999}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.card{background:#fff;border-radius:8px;border:0.5px solid rgba(0,0,0,0.07);overflow:hidden;position:relative}
+.img{height:165px;display:flex;align-items:flex-end;justify-content:flex-end;padding:8px;position:relative}
+.img.b1{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.img.b2{background:linear-gradient(135deg,#3a4f8a,#2a3968)}
+.rank{position:absolute;top:8px;left:8px;width:20px;height:20px;border-radius:50%;background:#2d5a3f;color:#fff;font-size:10px;font-weight:500;display:flex;align-items:center;justify-content:center}
+.price{background:rgba(255,255,255,0.93);padding:3px 9px;border-radius:4px;font-size:11px;font-weight:500}
+
+/* SOCIAL SIGNAL BADGE — new */
+.social-badge{position:absolute;top:8px;right:8px;background:rgba(45,90,63,0.88);color:#fff;font-size:9px;padding:3px 8px;border-radius:10px;display:flex;align-items:center;gap:4px;backdrop-filter:blur(4px)}
+.social-badge-dot{width:5px;height:5px;border-radius:50%;background:#8fcca0}
+
+.info{padding:9px 11px 11px}
+.retailer{font-size:9px;letter-spacing:1.2px;color:#2d5a3f;margin-bottom:3px}
+.name{font-size:11px;font-weight:500;line-height:1.3;margin-bottom:3px;color:#1a1a1a}
+.sold{font-size:9px;color:#999}
+.ai-block{margin-top:7px;padding-top:7px;border-top:0.5px solid rgba(0,0,0,0.07);font-size:9px;font-style:italic;color:#555;line-height:1.4}
+.ai-label{font-size:8px;color:#2d5a3f;letter-spacing:1px;font-style:normal;margin-bottom:2px}
+
+/* SOCIAL PROOF ROW — new */
+.social-row{margin-top:7px;padding-top:7px;border-top:0.5px solid rgba(0,0,0,0.07);display:flex;align-items:center;gap:6px;cursor:pointer}
+.social-row:hover .social-expand{color:#2d5a3f}
+.mini-avatars{display:flex}
+.mini-av{width:16px;height:16px;border-radius:50%;border:1.5px solid #fff;margin-right:-5px;font-size:7px;font-weight:500;color:#fff;display:flex;align-items:center;justify-content:center}
+.av-a{background:#c48a6e}.av-b{background:#6e8ec4}.av-c{background:#9a6ec4}.av-d{background:#6ec49a}
+.social-text{font-size:9px;color:#666;flex:1;line-height:1.35}
+.social-text strong{color:#2d5a3f;font-weight:500}
+.social-expand{font-size:9px;color:#aaa;transition:color 0.15s}
+
+.btn-row{display:flex;gap:5px;margin-top:8px}
+.btn-view{flex:1;background:#2d5a3f;color:#fff;border:none;padding:5px;border-radius:4px;font-size:9px;font-weight:500;cursor:pointer}
+.btn-save{background:#fff;border:0.5px solid rgba(0,0,0,0.15);padding:5px 9px;border-radius:4px;font-size:9px;cursor:pointer}
+
+/* COMMUNITY STRIP — the new section below products */
+.community-section{padding:0 20px 16px}
+.community-label{font-size:10px;letter-spacing:1.8px;color:#2d5a3f;margin-bottom:10px}
+.community-strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.community-strip::-webkit-scrollbar{height:3px}
+.community-strip::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.15);border-radius:2px}
+.comm-card{background:#fff;border-radius:6px;border:0.5px solid rgba(0,0,0,0.07);padding:10px;min-width:140px;flex-shrink:0;cursor:pointer;transition:border-color 0.15s}
+.comm-card:hover{border-color:#2d5a3f}
+.comm-thumb{width:100%;height:80px;border-radius:4px;margin-bottom:7px}
+.comm-thumb.t1{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.comm-thumb.t2{background:linear-gradient(135deg,#6e8ec4,#4a6a9a)}
+.comm-thumb.t3{background:linear-gradient(135deg,#9a6ec4,#7a4ea4)}
+.comm-thumb.t4{background:linear-gradient(135deg,#c48a6e,#a46a4e)}
+.comm-occasion{font-size:8px;letter-spacing:1.2px;color:#2d5a3f;margin-bottom:3px}
+.comm-desc{font-size:10px;line-height:1.35;color:#333;margin-bottom:4px}
+.comm-meta{font-size:9px;color:#888;display:flex;align-items:center;gap:4px}
+.comm-stars{color:#c4a050;font-size:9px}
+.comm-tag{font-size:8px;background:#e8f0ea;color:#2d5a3f;padding:2px 6px;border-radius:3px;margin-left:auto}
+
+/* OUTCOME DRAWER */
+.drawer-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.25);z-index:20;display:none;align-items:flex-end;justify-content:center}
+.drawer-overlay.open{display:flex}
+.drawer{background:#faf6ed;border-radius:12px 12px 0 0;width:100%;max-width:680px;padding:20px;max-height:70vh;overflow-y:auto}
+.drawer-handle{width:32px;height:3px;background:rgba(0,0,0,0.15);border-radius:2px;margin:0 auto 16px}
+.drawer-title{font-family:var(--font-serif);font-size:16px;color:#2d5a3f;margin-bottom:4px}
+.drawer-sub{font-size:11px;color:#888;margin-bottom:16px;line-height:1.5}
+.outcome-list{display:flex;flex-direction:column;gap:8px}
+.outcome-item{display:flex;gap:10px;padding:10px;background:#fff;border-radius:6px;border:0.5px solid rgba(0,0,0,0.07)}
+.outcome-thumb{width:44px;height:44px;border-radius:4px;flex-shrink:0}
+.ot1{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.ot2{background:linear-gradient(135deg,#3a4f8a,#2a3968)}
+.ot3{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.outcome-body{flex:1}
+.outcome-occasion{font-size:9px;letter-spacing:1px;color:#2d5a3f;margin-bottom:2px}
+.outcome-quote{font-size:11px;font-style:italic;color:#333;line-height:1.4;margin-bottom:4px}
+.outcome-footer{display:flex;align-items:center;gap:8px;font-size:9px;color:#888}
+.outcome-stars{color:#c4a050}
+.drawer-close{width:100%;background:#2d5a3f;color:#fff;border:none;padding:10px;border-radius:6px;font-size:12px;cursor:pointer;margin-top:14px}
+
+.chatbar{padding:12px 18px;border-top:0.5px solid rgba(0,0,0,0.07);display:flex;align-items:center;gap:10px;background:#F5F0E8}
+.tabs{display:flex;gap:12px;font-size:9px;letter-spacing:1px;color:#888}
+.tab.active{color:#2d5a3f;font-weight:500}
+.mic{width:30px;height:30px;border-radius:50%;background:#2d5a3f;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;flex-shrink:0}
+.input-mock{flex:1;background:#fff;border:0.5px solid rgba(0,0,0,0.08);border-radius:16px;padding:6px 13px;font-size:11px;color:#aaa}
+</style>
+
+<h2 class="sr-only">Pine UI prototype showing passive social proof signals integrated into product cards and a community outcomes section below results.</h2>
+
+<div class="app">
+  <div class="header">
+    <div class="logo">◈ PINE</div>
+    <div class="nav-center">DISCOVER</div>
+    <div class="header-icons">⌕ ◔ ○</div>
+  </div>
+
+  <div class="body">
+    <div class="left">
+      <div class="pine-status">● PINE IS LISTENING</div>
+      <div class="query">"navy dress for Princeton formal, gold jewelry, under $200, arrives before Thursday"</div>
+      <div class="orb-wrap">
+        <div class="orb"><div class="orb-ring"></div></div>
+        <div class="orb-btns"><span>RESTART</span><span style="color:#b33">STOP</span></div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="results-area">
+        <div class="section-head">
+          <div class="section-label">CURATED FOR THIS CONVERSATION</div>
+          <div class="section-count">2 of 2</div>
+        </div>
+
+        <div class="cards">
+          <div class="card">
+            <div class="img b1">
+              <div class="rank">1</div>
+              <div class="social-badge"><div class="social-badge-dot"></div>14 wore this to formals</div>
+              <div class="price">$89.00</div>
+            </div>
+            <div class="info">
+              <div class="retailer">LULUS.COM</div>
+              <div class="name">Photo Finish Royal Blue Sequin Maxi Dress</div>
+              <div class="sold">Sold by lulus.com · Free delivery on $50+</div>
+              <div class="ai-block">
+                <div class="ai-label">◷ AI RECOMMENDATION</div>
+                Navy tone complements gold jewelry; sequin reads formal without overdressing.
+              </div>
+              <div class="social-row" onclick="openDrawer()">
+                <div class="mini-avatars">
+                  <div class="mini-av av-a">A</div>
+                  <div class="mini-av av-b">S</div>
+                  <div class="mini-av av-c">M</div>
+                  <div class="mini-av av-d">+</div>
+                </div>
+                <div class="social-text"><strong>14 people</strong> bought this for college formals · avg 4.7★</div>
+                <div class="social-expand">▾ see outcomes</div>
+              </div>
+              <div class="btn-row">
+                <button class="btn-view">View at lulus.com</button>
+                <button class="btn-save">♡</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="img b2">
+              <div class="rank">2</div>
+              <div class="price">$169.00</div>
+            </div>
+            <div class="info">
+              <div class="retailer">MACY'S</div>
+              <div class="name">B Darlin Embellished Sweetheart Gown — Electric Blue</div>
+              <div class="sold">Sold by Macy's · Free delivery on $69+</div>
+              <div class="ai-block">
+                <div class="ai-label">◷ AI RECOMMENDATION</div>
+                Deep blue aligns with your color preference; sweetheart neckline is formal-appropriate.
+              </div>
+              <div class="social-row" onclick="openDrawer()">
+                <div class="mini-avatars">
+                  <div class="mini-av av-b">B</div>
+                  <div class="mini-av av-d">J</div>
+                </div>
+                <div class="social-text"><strong>6 people</strong> bought this for similar occasions · avg 4.4★</div>
+                <div class="social-expand">▾ see outcomes</div>
+              </div>
+              <div class="btn-row">
+                <button class="btn-view">View at Macy's</button>
+                <button class="btn-save">♡</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="community-section">
+          <div class="community-label">WHAT OTHERS WORE TO COLLEGE FORMALS</div>
+          <div class="community-strip">
+            <div class="comm-card" onclick="openDrawer()">
+              <div class="comm-thumb t1"></div>
+              <div class="comm-occasion">PRINCETON FORMAL · APR</div>
+              <div class="comm-desc">"matched perfectly with my gold earrings"</div>
+              <div class="comm-meta"><span class="comm-stars">★★★★★</span><span class="comm-tag">kept it</span></div>
+            </div>
+            <div class="comm-card" onclick="openDrawer()">
+              <div class="comm-thumb t2"></div>
+              <div class="comm-occasion">COLLEGE FORMAL · MAR</div>
+              <div class="comm-desc">"photos came out way better than expected"</div>
+              <div class="comm-meta"><span class="comm-stars">★★★★★</span><span class="comm-tag">kept it</span></div>
+            </div>
+            <div class="comm-card" onclick="openDrawer()">
+              <div class="comm-thumb t3"></div>
+              <div class="comm-occasion">SPRING FORMAL · MAR</div>
+              <div class="comm-desc">"runs a bit small — size up"</div>
+              <div class="comm-meta"><span class="comm-stars">★★★★</span><span class="comm-tag">kept it</span></div>
+            </div>
+            <div class="comm-card" onclick="openDrawer()">
+              <div class="comm-thumb t4"></div>
+              <div class="comm-occasion">IVY FORMAL · FEB</div>
+              <div class="comm-desc">"color was slightly different in person but still loved it"</div>
+              <div class="comm-meta"><span class="comm-stars">★★★★</span><span class="comm-tag">kept it</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chatbar">
+        <div class="tabs">
+          <span class="tab active">⊙ EXPLORE</span>
+          <span class="tab">☆ CURATED</span>
+          <span class="tab">♡ SAVED</span>
+          <span class="tab">○ PROFILE</span>
+        </div>
+        <div class="mic">◉</div>
+        <div class="input-mock">Refine your search or ask Pine something new…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer(event)">
+  <div class="drawer" id="drawer">
+    <div class="drawer-handle"></div>
+    <div class="drawer-title">What others wore to formals</div>
+    <div class="drawer-sub">14 Pine users bought this for college formals. Here's how it went — occasion-specific, constraint-matched, no paid reviews.</div>
+    <div class="outcome-list">
+      <div class="outcome-item">
+        <div class="outcome-thumb ot1"></div>
+        <div class="outcome-body">
+          <div class="outcome-occasion">PRINCETON FORMAL · APRIL 2026</div>
+          <div class="outcome-quote">"matched my gold hoops perfectly. got so many compliments. pine nailed it."</div>
+          <div class="outcome-footer"><span class="outcome-stars">★★★★★</span><span>kept it</span><span>·</span><span>budget: under $100</span></div>
+        </div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-thumb ot2"></div>
+        <div class="outcome-body">
+          <div class="outcome-occasion">YALE SPRING FORMAL · MARCH 2026</div>
+          <div class="outcome-quote">"photos came out way better than expected. runs true to size. would order again."</div>
+          <div class="outcome-footer"><span class="outcome-stars">★★★★★</span><span>kept it</span><span>·</span><span>budget: under $100</span></div>
+        </div>
+      </div>
+      <div class="outcome-item">
+        <div class="outcome-thumb ot3"></div>
+        <div class="outcome-body">
+          <div class="outcome-occasion">DARTMOUTH FORMAL · MARCH 2026</div>
+          <div class="outcome-quote">"size up one — the sequin is slightly stiff but looks incredible on."</div>
+          <div class="outcome-footer"><span class="outcome-stars">★★★★</span><span>kept it</span><span>·</span><span>budget: under $150</span></div>
+        </div>
+      </div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">Close</button>
+  </div>
+</div>
+
+<script>
+function openDrawer(){document.getElementById('overlay').classList.add('open')}
+function closeDrawer(e){if(!e||e.target===document.getElementById('overlay')||e.currentTarget===document.querySelector('.drawer-close'))document.getElementById('overlay').classList.remove('open')}
+</script>
