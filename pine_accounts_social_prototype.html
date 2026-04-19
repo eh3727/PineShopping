@@ -1,0 +1,372 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.app{background:#F5F0E8;border-radius:12px;overflow:hidden;font-family:var(--font-sans);color:#1a1a1a;min-height:600px;display:flex;flex-direction:column}
+.header{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-bottom:0.5px solid rgba(0,0,0,0.07)}
+.logo{font-family:var(--font-serif);font-size:17px;color:#2d5a3f;letter-spacing:0.3px;display:flex;align-items:center;gap:6px}
+.nav-center{font-size:11px;letter-spacing:2px;color:#2d5a3f}
+.header-icons{display:flex;gap:14px;font-size:13px;color:#2d5a3f}
+
+/* TAB BAR */
+.tab-bar{display:flex;border-bottom:0.5px solid rgba(0,0,0,0.07);background:#F5F0E8}
+.tab-btn{flex:1;padding:11px 0;font-size:10px;letter-spacing:1.3px;color:#999;background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s}
+.tab-btn.active{color:#2d5a3f;border-bottom-color:#2d5a3f;font-weight:500}
+
+/* SCREENS */
+.screen{display:none;flex:1;overflow-y:auto}
+.screen.active{display:block}
+
+/* ── DISCOVER SCREEN ── */
+.discover-layout{display:grid;grid-template-columns:200px 1fr}
+.left-panel{padding:18px 15px;border-right:0.5px solid rgba(0,0,0,0.06)}
+.pine-status{font-size:10px;letter-spacing:1.5px;color:#2d5a3f;margin-bottom:8px}
+.query-text{font-family:var(--font-serif);font-style:italic;font-size:13px;line-height:1.5;color:#3a3a3a;margin-bottom:16px}
+.orb-wrap{display:flex;flex-direction:column;align-items:center;gap:8px}
+.orb{width:48px;height:48px;border-radius:50%;background:#2d5a3f;display:flex;align-items:center;justify-content:center}
+.orb-ring{width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,0.35)}
+.orb-btns{display:flex;gap:12px;font-size:9px;letter-spacing:1.2px;color:#777}
+.results-pane{padding:16px 18px}
+.sec-head{display:flex;justify-content:space-between;margin-bottom:11px}
+.sec-label{font-size:10px;letter-spacing:1.8px;color:#2d5a3f}
+.sec-count{font-size:10px;color:#999}
+.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.pcard{background:#fff;border-radius:7px;border:0.5px solid rgba(0,0,0,0.07);overflow:hidden}
+.pimg{height:155px;position:relative}
+.pimg.b1{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.pimg.b2{background:linear-gradient(135deg,#3a4f8a,#2a3968)}
+.prank{position:absolute;top:8px;left:8px;width:19px;height:19px;border-radius:50%;background:#2d5a3f;color:#fff;font-size:9px;font-weight:500;display:flex;align-items:center;justify-content:center}
+.pprice{position:absolute;bottom:8px;right:8px;background:rgba(255,255,255,0.93);padding:2px 8px;border-radius:3px;font-size:10px;font-weight:500}
+
+/* friend bought badge on product */
+.friend-badge{position:absolute;top:8px;right:8px;background:rgba(45,90,63,0.85);color:#fff;font-size:8px;padding:2px 7px;border-radius:9px;display:flex;align-items:center;gap:3px}
+.fbdot{width:4px;height:4px;border-radius:50%;background:#8fcca0}
+
+.pinfo{padding:8px 10px 10px}
+.pretailer{font-size:8px;letter-spacing:1.2px;color:#2d5a3f;margin-bottom:2px}
+.pname{font-size:10px;font-weight:500;line-height:1.3;color:#1a1a1a;margin-bottom:2px}
+.pai{margin-top:6px;padding-top:6px;border-top:0.5px solid rgba(0,0,0,0.07);font-size:9px;font-style:italic;color:#555;line-height:1.35}
+.pai-label{font-size:8px;color:#2d5a3f;letter-spacing:1px;font-style:normal;margin-bottom:2px}
+.pbtn-row{display:flex;gap:5px;margin-top:7px}
+.pbtn-view{flex:1;background:#2d5a3f;color:#fff;border:none;padding:5px;border-radius:3px;font-size:9px;font-weight:500;cursor:pointer}
+.pbtn-save{background:#fff;border:0.5px solid rgba(0,0,0,0.15);padding:5px 8px;border-radius:3px;font-size:9px;cursor:pointer}
+
+/* ── FRIENDS SCREEN ── */
+.friends-screen{padding:18px 20px}
+.friends-hero{margin-bottom:18px}
+.friends-title{font-family:var(--font-serif);font-size:18px;color:#2d5a3f;margin-bottom:4px}
+.friends-sub{font-size:11px;color:#888;line-height:1.5}
+.following-row{display:flex;gap:10px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
+.following-row::-webkit-scrollbar{display:none}
+.follow-pill{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;flex-shrink:0}
+.follow-av{width:44px;height:44px;border-radius:50%;border:2px solid #2d5a3f;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:#fff}
+.follow-av.inactive{border-color:rgba(0,0,0,0.1);opacity:0.5}
+.av-e{background:#c48a6e}.av-s{background:#6e8ec4}.av-m{background:#9a6ec4}.av-j{background:#6ec49a}.av-add{background:#e8f0ea;border:1.5px dashed #2d5a3f}
+.follow-name{font-size:9px;color:#666;letter-spacing:0.3px}
+.add-label{font-size:9px;color:#2d5a3f;font-weight:500}
+
+.feed-label{font-size:10px;letter-spacing:1.8px;color:#2d5a3f;margin-bottom:12px}
+.feed-items{display:flex;flex-direction:column;gap:10px}
+.feed-item{background:#fff;border-radius:8px;border:0.5px solid rgba(0,0,0,0.07);overflow:hidden;cursor:pointer;transition:border-color 0.15s}
+.feed-item:hover{border-color:#2d5a3f}
+.feed-item-inner{display:flex;gap:0}
+.feed-thumb{width:90px;height:110px;flex-shrink:0}
+.ft1{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.ft2{background:linear-gradient(135deg,#c48a6e,#a46a4e)}
+.ft3{background:linear-gradient(135deg,#9a6ec4,#7a4ea4)}
+.ft4{background:linear-gradient(135deg,#6e8ec4,#4a6a9a)}
+.feed-body{padding:11px 12px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.feed-who{display:flex;align-items:center;gap:6px;margin-bottom:6px}
+.feed-av-sm{width:20px;height:20px;border-radius:50%;font-size:8px;font-weight:500;color:#fff;display:flex;align-items:center;justify-content:center}
+.feed-who-name{font-size:11px;font-weight:500;color:#1a1a1a}
+.feed-when{font-size:9px;color:#aaa;margin-left:auto}
+.feed-product{font-size:11px;font-weight:500;color:#1a1a1a;line-height:1.3;margin-bottom:4px}
+.feed-occasion{font-size:9px;color:#2d5a3f;letter-spacing:1px;margin-bottom:4px}
+.feed-verdict{display:flex;align-items:center;gap:6px}
+.verdict-tag{font-size:9px;padding:2px 7px;border-radius:3px;font-weight:500}
+.kept{background:#e8f0ea;color:#2d5a3f}
+.returned{background:#fce8e8;color:#a33}
+.feed-stars{font-size:9px;color:#c4a050}
+.feed-quote{font-size:10px;font-style:italic;color:#666;line-height:1.35;margin-top:4px}
+
+/* ── PROFILE SCREEN ── */
+.profile-screen{padding:18px 20px}
+.profile-top{display:flex;gap:14px;align-items:flex-start;margin-bottom:18px;padding-bottom:18px;border-bottom:0.5px solid rgba(0,0,0,0.07)}
+.profile-av{width:58px;height:58px;border-radius:50%;background:#c48a6e;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;color:#fff;flex-shrink:0}
+.profile-name{font-size:16px;font-weight:500;color:#1a1a1a;margin-bottom:2px}
+.profile-handle{font-size:11px;color:#888;margin-bottom:8px}
+.profile-stats{display:flex;gap:16px}
+.pstat{text-align:center}
+.pstat-n{font-size:15px;font-weight:500;color:#2d5a3f}
+.pstat-l{font-size:9px;color:#888;letter-spacing:0.5px}
+.taste-section{margin-bottom:18px}
+.taste-label{font-size:10px;letter-spacing:1.8px;color:#2d5a3f;margin-bottom:10px}
+.taste-chips{display:flex;flex-wrap:wrap;gap:6px}
+.taste-chip{background:#fff;border:0.5px solid rgba(45,90,63,0.3);color:#2d5a3f;font-size:10px;padding:4px 10px;border-radius:12px}
+.history-label{font-size:10px;letter-spacing:1.8px;color:#2d5a3f;margin-bottom:10px}
+.history-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.history-item{border-radius:5px;overflow:hidden;position:relative;aspect-ratio:3/4;cursor:pointer}
+.hi1{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.hi2{background:linear-gradient(135deg,#c48a6e,#a46a4e)}
+.hi3{background:linear-gradient(135deg,#9a6ec4,#7a4ea4)}
+.hi4{background:linear-gradient(135deg,#6e8ec4,#4a6a9a)}
+.hi5{background:linear-gradient(135deg,#6ec49a,#4ea47a)}
+.hi6{background:linear-gradient(135deg,#c4a050,#a48030)}
+.history-overlay{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.55));padding:6px 5px 5px;font-size:8px;color:rgba(255,255,255,0.9)}
+.history-kept{position:absolute;top:4px;right:4px;width:14px;height:14px;border-radius:50%;background:#2d5a3f;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff}
+
+/* bottom chat bar */
+.chatbar{padding:11px 16px;border-top:0.5px solid rgba(0,0,0,0.07);display:flex;align-items:center;gap:9px;background:#F5F0E8;flex-shrink:0}
+.ctabs{display:flex;gap:10px;font-size:9px;letter-spacing:1px;color:#888}
+.ctab.active{color:#2d5a3f;font-weight:500}
+.mic-btn{width:28px;height:28px;border-radius:50%;background:#2d5a3f;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;flex-shrink:0}
+.cinput{flex:1;background:#fff;border:0.5px solid rgba(0,0,0,0.08);border-radius:14px;padding:5px 12px;font-size:10px;color:#aaa}
+</style>
+
+<h2 class="sr-only">Pine social accounts prototype with three screens: Discover (products with friend signals), Friends feed (what people you follow bought), and Profile (your taste history).</h2>
+
+<div class="app">
+  <div class="header">
+    <div class="logo">◈ PINE</div>
+    <div class="nav-center">DISCOVER</div>
+    <div class="header-icons">⌕ ◔ ○</div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showScreen('discover',this)">DISCOVER</button>
+    <button class="tab-btn" onclick="showScreen('friends',this)">FRIENDS</button>
+    <button class="tab-btn" onclick="showScreen('profile',this)">PROFILE</button>
+  </div>
+
+  <!-- DISCOVER -->
+  <div class="screen active" id="screen-discover">
+    <div class="discover-layout">
+      <div class="left-panel">
+        <div class="pine-status">● PINE IS LISTENING</div>
+        <div class="query-text">"navy dress, Princeton formal, gold jewelry, under $200"</div>
+        <div class="orb-wrap">
+          <div class="orb"><div class="orb-ring"></div></div>
+          <div class="orb-btns"><span>RESTART</span><span style="color:#b33">STOP</span></div>
+        </div>
+      </div>
+      <div class="results-pane">
+        <div class="sec-head">
+          <div class="sec-label">CURATED FOR THIS CONVERSATION</div>
+          <div class="sec-count">2 of 2</div>
+        </div>
+        <div class="product-grid">
+          <div class="pcard">
+            <div class="pimg b1">
+              <div class="prank">1</div>
+              <div class="friend-badge"><div class="fbdot"></div>Emma bought this</div>
+              <div class="pprice">$89</div>
+            </div>
+            <div class="pinfo">
+              <div class="pretailer">LULUS.COM</div>
+              <div class="pname">Photo Finish Royal Blue Sequin Maxi Dress</div>
+              <div class="pai"><div class="pai-label">◷ AI RECOMMENDATION</div>Navy complements gold jewelry; sequin reads formal.</div>
+              <div class="pbtn-row"><button class="pbtn-view">View at lulus.com</button><button class="pbtn-save">♡</button></div>
+            </div>
+          </div>
+          <div class="pcard">
+            <div class="pimg b2">
+              <div class="prank">2</div>
+              <div class="pprice">$169</div>
+            </div>
+            <div class="pinfo">
+              <div class="pretailer">MACY'S</div>
+              <div class="pname">B Darlin Embellished Sweetheart Gown</div>
+              <div class="pai"><div class="pai-label">◷ AI RECOMMENDATION</div>Sweetheart neckline is formal-appropriate; deep blue aligns with preference.</div>
+              <div class="pbtn-row"><button class="pbtn-view">View at Macy's</button><button class="pbtn-save">♡</button></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRIENDS FEED -->
+  <div class="screen" id="screen-friends">
+    <div class="friends-screen">
+      <div class="friends-hero">
+        <div class="friends-title">What your people bought</div>
+        <div class="friends-sub">People you follow, their purchases through Pine, and whether it worked — no opinions, just outcomes.</div>
+      </div>
+
+      <div class="following-row">
+        <div class="follow-pill" onclick="showScreen('profile',document.querySelectorAll('.tab-btn')[2])">
+          <div class="follow-av av-e">E</div>
+          <div class="follow-name">Emma</div>
+        </div>
+        <div class="follow-pill">
+          <div class="follow-av av-s">S</div>
+          <div class="follow-name">Sarah</div>
+        </div>
+        <div class="follow-pill">
+          <div class="follow-av av-m">M</div>
+          <div class="follow-name">Maya</div>
+        </div>
+        <div class="follow-pill">
+          <div class="follow-av av-j inactive">J</div>
+          <div class="follow-name">Jess</div>
+        </div>
+        <div class="follow-pill">
+          <div class="follow-av av-add" style="color:#2d5a3f;font-size:18px;font-weight:300">+</div>
+          <div class="add-label">add</div>
+        </div>
+      </div>
+
+      <div class="feed-label">RECENT PURCHASES</div>
+      <div class="feed-items">
+
+        <div class="feed-item" onclick="showScreen('profile',document.querySelectorAll('.tab-btn')[2])">
+          <div class="feed-item-inner">
+            <div class="feed-thumb ft1"></div>
+            <div class="feed-body">
+              <div>
+                <div class="feed-who">
+                  <div class="feed-av-sm av-e">E</div>
+                  <div class="feed-who-name">Emma Chen</div>
+                  <div class="feed-when">2d ago</div>
+                </div>
+                <div class="feed-occasion">PRINCETON FORMAL</div>
+                <div class="feed-product">Photo Finish Royal Blue Sequin Maxi Dress</div>
+                <div class="feed-quote">"wore it friday, got so many compliments — pine was right"</div>
+              </div>
+              <div class="feed-verdict">
+                <span class="verdict-tag kept">kept it</span>
+                <span class="feed-stars">★★★★★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feed-item">
+          <div class="feed-item-inner">
+            <div class="feed-thumb ft2"></div>
+            <div class="feed-body">
+              <div>
+                <div class="feed-who">
+                  <div class="feed-av-sm av-s">S</div>
+                  <div class="feed-who-name">Sarah Kim</div>
+                  <div class="feed-when">5d ago</div>
+                </div>
+                <div class="feed-occasion">DATE NIGHT</div>
+                <div class="feed-product">Satin Cowl Slip Dress — Terracotta</div>
+                <div class="feed-quote">"runs small, size up — but worth it"</div>
+              </div>
+              <div class="feed-verdict">
+                <span class="verdict-tag kept">kept it</span>
+                <span class="feed-stars">★★★★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feed-item">
+          <div class="feed-item-inner">
+            <div class="feed-thumb ft3"></div>
+            <div class="feed-body">
+              <div>
+                <div class="feed-who">
+                  <div class="feed-av-sm av-m">M</div>
+                  <div class="feed-who-name">Maya Patel</div>
+                  <div class="feed-when">1w ago</div>
+                </div>
+                <div class="feed-occasion">JOB INTERVIEW</div>
+                <div class="feed-product">Structured Blazer Dress — Midnight</div>
+                <div class="feed-quote">"got the job. crediting pine."</div>
+              </div>
+              <div class="feed-verdict">
+                <span class="verdict-tag kept">kept it</span>
+                <span class="feed-stars">★★★★★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feed-item">
+          <div class="feed-item-inner">
+            <div class="feed-thumb ft4"></div>
+            <div class="feed-body">
+              <div>
+                <div class="feed-who">
+                  <div class="feed-av-sm av-s">S</div>
+                  <div class="feed-who-name">Sarah Kim</div>
+                  <div class="feed-when">2w ago</div>
+                </div>
+                <div class="feed-occasion">FRIEND'S BIRTHDAY</div>
+                <div class="feed-product">Linen Wide-Leg Trousers — Ivory</div>
+                <div class="feed-quote">"color was slightly off in person — more yellow than white"</div>
+              </div>
+              <div class="feed-verdict">
+                <span class="verdict-tag returned">returned</span>
+                <span class="feed-stars">★★★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="screen" id="screen-profile">
+    <div class="profile-screen">
+      <div class="profile-top">
+        <div class="profile-av">E</div>
+        <div>
+          <div class="profile-name">Emma Chen</div>
+          <div class="profile-handle">princeton '26 · followed by you</div>
+          <div class="profile-stats">
+            <div class="pstat"><div class="pstat-n">23</div><div class="pstat-l">bought</div></div>
+            <div class="pstat"><div class="pstat-n">19</div><div class="pstat-l">kept</div></div>
+            <div class="pstat"><div class="pstat-n">83%</div><div class="pstat-l">keep rate</div></div>
+            <div class="pstat"><div class="pstat-n">4.6★</div><div class="pstat-l">avg rating</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="taste-section">
+        <div class="taste-label">TASTE PROFILE</div>
+        <div class="taste-chips">
+          <div class="taste-chip">minimal</div>
+          <div class="taste-chip">elegant not flashy</div>
+          <div class="taste-chip">jewel tones</div>
+          <div class="taste-chip">under $150</div>
+          <div class="taste-chip">delivery speed matters</div>
+          <div class="taste-chip">avoids synthetic fabrics</div>
+        </div>
+      </div>
+
+      <div class="history-label">PURCHASE HISTORY</div>
+      <div class="history-grid">
+        <div class="history-item hi1"><div class="history-kept">✓</div><div class="history-overlay">Princeton Formal</div></div>
+        <div class="history-item hi2"><div class="history-kept">✓</div><div class="history-overlay">Date Night</div></div>
+        <div class="history-item hi3"><div class="history-kept">✓</div><div class="history-overlay">Job Interview</div></div>
+        <div class="history-item hi4" style="position:relative"><div style="position:absolute;top:4px;right:4px;width:14px;height:14px;border-radius:50%;background:#a33;display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff">↩</div><div class="history-overlay">Birthday Dinner</div></div>
+        <div class="history-item hi5"><div class="history-kept">✓</div><div class="history-overlay">Spring Formal</div></div>
+        <div class="history-item hi6"><div class="history-kept">✓</div><div class="history-overlay">Graduation</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chatbar">
+    <div class="ctabs">
+      <span class="ctab active">⊙ EXPLORE</span>
+      <span class="ctab">☆ CURATED</span>
+      <span class="ctab">♡ SAVED</span>
+      <span class="ctab">○ PROFILE</span>
+    </div>
+    <div class="mic-btn">◉</div>
+    <div class="cinput">Tell Pine what you're looking for…</div>
+  </div>
+</div>
+
+<script>
+function showScreen(id, btn) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + id).classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+</script>
