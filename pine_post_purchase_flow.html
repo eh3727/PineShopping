@@ -1,0 +1,457 @@
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.app{background:#F5F0E8;border-radius:12px;overflow:hidden;font-family:var(--font-sans);color:#1a1a1a;min-height:640px;display:flex;flex-direction:column;max-width:680px}
+.header{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-bottom:0.5px solid rgba(0,0,0,0.07);flex-shrink:0}
+.logo{font-family:var(--font-serif);font-size:17px;color:#2d5a3f}
+.header-title{font-size:11px;letter-spacing:2px;color:#2d5a3f}
+.header-back{font-size:11px;color:#2d5a3f;cursor:pointer;display:flex;align-items:center;gap:4px}
+
+.tab-bar{display:flex;border-bottom:0.5px solid rgba(0,0,0,0.07);background:#F5F0E8;flex-shrink:0}
+.tab-btn{flex:1;padding:10px 0;font-size:10px;letter-spacing:1.3px;color:#999;background:none;border:none;cursor:pointer;border-bottom:2px solid transparent;transition:all 0.15s}
+.tab-btn.active{color:#2d5a3f;border-bottom-color:#2d5a3f;font-weight:500}
+
+.screen{display:none;flex:1;overflow-y:auto}
+.screen.active{display:flex;flex-direction:column}
+
+/* ── NOTIFICATION SCREEN ── */
+.notif-screen{padding:20px}
+.notif-header{margin-bottom:20px}
+.notif-title{font-family:var(--font-serif);font-size:20px;color:#2d5a3f;margin-bottom:4px}
+.notif-sub{font-size:12px;color:#888;line-height:1.5}
+.notif-card{background:#fff;border-radius:10px;border:0.5px solid rgba(0,0,0,0.08);overflow:hidden;margin-bottom:12px;cursor:pointer;transition:border-color 0.15s}
+.notif-card:hover{border-color:#2d5a3f}
+.notif-inner{display:flex;gap:0}
+.notif-thumb{width:80px;height:96px;flex-shrink:0}
+.nt1{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.nt2{background:linear-gradient(135deg,#c48a6e,#a46a4e)}
+.notif-body{padding:12px 14px;flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.notif-occasion{font-size:9px;letter-spacing:1.2px;color:#2d5a3f;margin-bottom:3px}
+.notif-product{font-size:12px;font-weight:500;color:#1a1a1a;line-height:1.3;margin-bottom:3px}
+.notif-retailer{font-size:10px;color:#999;margin-bottom:8px}
+.notif-prompt{font-size:11px;color:#555;font-style:italic}
+.notif-cta{display:flex;gap:8px;margin-top:10px}
+.btn-share{flex:1;background:#2d5a3f;color:#fff;border:none;padding:8px;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer}
+.btn-skip{background:#fff;border:0.5px solid rgba(0,0,0,0.12);color:#888;padding:8px 14px;border-radius:5px;font-size:11px;cursor:pointer}
+.notif-done{background:#e8f0ea;border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:11px;color:#2d5a3f;margin-bottom:12px}
+
+/* ── POST CREATION SCREEN ── */
+.post-screen{padding:0}
+.post-top{background:#fff;border-bottom:0.5px solid rgba(0,0,0,0.07);padding:16px 20px}
+.post-product-row{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.post-product-thumb{width:52px;height:64px;border-radius:5px;flex-shrink:0}
+.pp1{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.post-product-info{flex:1}
+.post-product-name{font-size:12px;font-weight:500;color:#1a1a1a;margin-bottom:2px;line-height:1.3}
+.post-product-meta{font-size:10px;color:#999}
+.post-section-label{font-size:10px;letter-spacing:1.5px;color:#2d5a3f;margin-bottom:10px}
+
+/* KEEP OR RETURN */
+.keep-return{display:flex;gap:8px;margin-bottom:14px}
+.kr-btn{flex:1;padding:10px;border-radius:6px;border:0.5px solid rgba(0,0,0,0.1);background:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 0.15s;color:#555}
+.kr-btn.selected-keep{background:#e8f0ea;border-color:#2d5a3f;color:#2d5a3f;font-weight:500}
+.kr-btn.selected-return{background:#fce8e8;border-color:#c44;color:#c44;font-weight:500}
+
+/* STAR RATING */
+.star-row{display:flex;gap:6px;margin-bottom:14px}
+.star{font-size:24px;color:#ddd;cursor:pointer;transition:color 0.1s;user-select:none}
+.star.lit{color:#c4a050}
+
+/* OCCASION TAG */
+.occasion-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.occ-chip{padding:5px 12px;border-radius:12px;border:0.5px solid rgba(0,0,0,0.1);background:#fff;font-size:10px;color:#555;cursor:pointer;transition:all 0.15s}
+.occ-chip.selected{background:#2d5a3f;color:#fff;border-color:#2d5a3f}
+
+/* PHOTO UPLOAD AREA */
+.photo-area{margin-bottom:14px}
+.photo-upload{border:1px dashed rgba(45,90,63,0.3);border-radius:8px;padding:20px;text-align:center;cursor:pointer;background:#faf7f0;transition:all 0.15s}
+.photo-upload:hover{border-color:#2d5a3f;background:#f0f5f1}
+.photo-icon{font-size:20px;color:#2d5a3f;margin-bottom:6px}
+.photo-label{font-size:11px;color:#888;line-height:1.4}
+.photo-label strong{color:#2d5a3f}
+.photo-previews{display:flex;gap:6px;margin-top:10px}
+.photo-preview{width:56px;height:56px;border-radius:5px;position:relative}
+.ph1{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.ph2{background:linear-gradient(135deg,#3a4f8a,#2a3968)}
+.photo-remove{position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;background:#c44;color:#fff;font-size:8px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+
+/* COMMENT */
+.post-comment-area{padding:0 20px 16px;background:#fff}
+.comment-input{width:100%;background:#f8f5ee;border:0.5px solid rgba(0,0,0,0.08);border-radius:6px;padding:10px 12px;font-size:12px;font-family:var(--font-sans);resize:none;color:#1a1a1a;line-height:1.5}
+.comment-input::placeholder{color:#aaa}
+.comment-input:focus{outline:none;border-color:#2d5a3f}
+.comment-hint{font-size:10px;color:#aaa;margin-top:5px;font-style:italic}
+
+/* PINE CONTEXT */
+.pine-context{margin:0 20px 16px;background:#f0f5f1;border-radius:7px;padding:11px 13px;border:0.5px solid rgba(45,90,63,0.15)}
+.pc-label{font-size:9px;letter-spacing:1.2px;color:#2d5a3f;margin-bottom:5px}
+.pc-text{font-size:10px;color:#444;line-height:1.5;font-style:italic}
+
+/* SHARE SETTINGS */
+.share-settings{padding:0 20px 16px;background:#fff;border-top:0.5px solid rgba(0,0,0,0.06)}
+.share-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:0.5px solid rgba(0,0,0,0.05)}
+.share-row:last-child{border-bottom:none}
+.share-label{font-size:11px;color:#333}
+.share-sub{font-size:9px;color:#999;margin-top:1px}
+.toggle{width:36px;height:20px;border-radius:10px;background:#2d5a3f;position:relative;cursor:pointer;flex-shrink:0}
+.toggle.off{background:#ddd}
+.toggle-dot{width:16px;height:16px;border-radius:50%;background:#fff;position:absolute;top:2px;right:2px;transition:right 0.15s}
+.toggle.off .toggle-dot{right:auto;left:2px}
+
+.post-submit-area{padding:14px 20px;background:#F5F0E8;flex-shrink:0}
+.post-submit-btn{width:100%;background:#2d5a3f;color:#fff;border:none;padding:12px;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;letter-spacing:0.3px}
+.post-submit-btn:hover{opacity:0.9}
+
+/* ── FEED / EXPLORE SCREEN ── */
+.feed-screen{padding:16px 20px}
+.feed-filters{display:flex;gap:7px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px}
+.feed-filters::-webkit-scrollbar{display:none}
+.filter-chip{padding:5px 12px;border-radius:12px;border:0.5px solid rgba(0,0,0,0.1);background:#fff;font-size:10px;color:#555;cursor:pointer;white-space:nowrap;transition:all 0.15s;flex-shrink:0}
+.filter-chip.active{background:#2d5a3f;color:#fff;border-color:#2d5a3f}
+
+.feed-post{background:#fff;border-radius:9px;border:0.5px solid rgba(0,0,0,0.07);margin-bottom:12px;overflow:hidden}
+.fp-header{display:flex;align-items:center;gap:8px;padding:11px 13px 0}
+.fp-av{width:30px;height:30px;border-radius:50%;font-size:10px;font-weight:500;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.fp-av-e{background:#c48a6e}.fp-av-s{background:#6e8ec4}.fp-av-m{background:#9a6ec4}.fp-av-j{background:#6ec49a}
+.fp-name{font-size:12px;font-weight:500;color:#1a1a1a;flex:1}
+.fp-when{font-size:10px;color:#bbb}
+.fp-occasion{font-size:9px;letter-spacing:1.2px;color:#2d5a3f;padding:5px 13px 0}
+.fp-images{display:flex;gap:3px;margin-top:8px;height:180px}
+.fp-img-main{flex:2;height:100%}
+.fp-img-side{display:flex;flex-direction:column;flex:1;gap:3px;height:100%}
+.fp-img-half{flex:1}
+.fi1{background:linear-gradient(135deg,#2a3968,#1a2548)}
+.fi2{background:linear-gradient(135deg,#3a4f8a,#2a3968)}
+.fi1b{background:linear-gradient(135deg,#1a2548,#0f1530)}
+.fi2b{background:linear-gradient(135deg,#c48a6e,#a46a4e)}
+.fi3{background:linear-gradient(135deg,#6ec49a,#4ea47a)}
+.fi3b{background:linear-gradient(135deg,#4ea47a,#2e845a)}
+.fp-body{padding:10px 13px}
+.fp-product{font-size:11px;font-weight:500;color:#1a1a1a;margin-bottom:3px}
+.fp-retailer{font-size:9px;color:#999;margin-bottom:6px}
+.fp-verdict-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.fp-verdict{font-size:10px;padding:2px 8px;border-radius:3px;font-weight:500}
+.fp-kept{background:#e8f0ea;color:#2d5a3f}
+.fp-returned{background:#fce8e8;color:#c44}
+.fp-stars{color:#c4a050;font-size:10px}
+.fp-comment{font-size:11px;color:#444;line-height:1.5;margin-bottom:8px;font-style:italic}
+.fp-pine-context{background:#f8f5ee;border-radius:5px;padding:7px 9px;margin-bottom:8px;font-size:9px;color:#666;line-height:1.4}
+.fp-pine-label{font-size:8px;letter-spacing:1px;color:#2d5a3f;margin-bottom:2px}
+.fp-actions{display:flex;gap:12px;padding-top:8px;border-top:0.5px solid rgba(0,0,0,0.06)}
+.fp-action{font-size:10px;color:#888;cursor:pointer;display:flex;align-items:center;gap:4px;transition:color 0.15s}
+.fp-action:hover{color:#2d5a3f}
+.fp-helpful{margin-left:auto;font-size:10px;color:#2d5a3f;font-weight:500}
+
+.chatbar{padding:11px 16px;border-top:0.5px solid rgba(0,0,0,0.07);display:flex;align-items:center;gap:9px;background:#F5F0E8;flex-shrink:0}
+.ctabs{display:flex;gap:10px;font-size:9px;letter-spacing:1px;color:#888}
+.ctab.active{color:#2d5a3f;font-weight:500}
+.mic-btn{width:28px;height:28px;border-radius:50%;background:#2d5a3f;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px;flex-shrink:0}
+.cinput{flex:1;background:#fff;border:0.5px solid rgba(0,0,0,0.08);border-radius:14px;padding:5px 12px;font-size:10px;color:#aaa}
+</style>
+
+<h2 class="sr-only">Pine post-purchase flow with three tabs: a notification prompt asking how it went, a post creation screen with photo upload and ranking, and a community feed of outfit posts.</h2>
+
+<div class="app">
+  <div class="header">
+    <div class="logo">◈ PINE</div>
+    <div class="header-title" id="headerTitle">HOW DID IT GO?</div>
+    <div style="width:60px"></div>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="showScreen('notif',this)">FOLLOW-UP</button>
+    <button class="tab-btn" onclick="showScreen('post',this)">CREATE POST</button>
+    <button class="tab-btn" onclick="showScreen('feed',this)">COMMUNITY</button>
+  </div>
+
+  <!-- FOLLOW-UP NOTIFICATION -->
+  <div class="screen active" id="screen-notif">
+    <div class="notif-screen">
+      <div class="notif-header">
+        <div class="notif-title">How did it go?</div>
+        <div class="notif-sub">Pine follows up after every purchase. Your response improves future recommendations — for you and for everyone who faces the same situation.</div>
+      </div>
+
+      <div class="notif-done">
+        <span style="font-size:14px">✓</span>
+        <span>You shared your Princeton formal look — 3 people found it helpful</span>
+      </div>
+
+      <div class="notif-card" onclick="showScreen('post',document.querySelectorAll('.tab-btn')[1])">
+        <div class="notif-inner">
+          <div class="notif-thumb nt2"></div>
+          <div class="notif-body">
+            <div>
+              <div class="notif-occasion">DATE NIGHT · 2 WEEKS AGO</div>
+              <div class="notif-product">Satin Cowl Slip Dress — Terracotta</div>
+              <div class="notif-retailer">Revolve · $148</div>
+              <div class="notif-prompt">"Did you wear the dress? How did it go?"</div>
+            </div>
+            <div class="notif-cta">
+              <button class="btn-share" onclick="event.stopPropagation();showScreen('post',document.querySelectorAll('.tab-btn')[1])">Share how it went</button>
+              <button class="btn-skip" onclick="event.stopPropagation()">Skip</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:18px;padding:14px;background:#fff;border-radius:9px;border:0.5px solid rgba(0,0,0,0.07)">
+        <div style="font-size:10px;letter-spacing:1.5px;color:#2d5a3f;margin-bottom:8px">WHY THIS MATTERS</div>
+        <div style="font-size:11px;color:#555;line-height:1.6">Your response tells Pine whether its recommendation actually worked — not just whether you clicked. Every "kept it" or "returned it" makes Pine smarter for the next person facing your exact situation. It takes 30 seconds.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- POST CREATION -->
+  <div class="screen" id="screen-post">
+    <div class="post-screen" style="flex:1;overflow-y:auto">
+
+      <div class="post-top">
+        <div class="post-product-row">
+          <div class="post-product-thumb pp1"></div>
+          <div class="post-product-info">
+            <div class="post-product-name">Photo Finish Royal Blue Sequin Maxi Dress</div>
+            <div class="post-product-meta">lulus.com · $89 · Princeton Formal · Apr 2026</div>
+          </div>
+        </div>
+
+        <div class="post-section-label">DID YOU KEEP IT?</div>
+        <div class="keep-return">
+          <div class="kr-btn selected-keep" id="keepBtn" onclick="selectKR('keep')">✓ Kept it</div>
+          <div class="kr-btn" id="returnBtn" onclick="selectKR('return')">↩ Returned it</div>
+        </div>
+
+        <div class="post-section-label">HOW WAS IT?</div>
+        <div class="star-row" id="starRow">
+          <div class="star lit" onclick="setStars(1)">★</div>
+          <div class="star lit" onclick="setStars(2)">★</div>
+          <div class="star lit" onclick="setStars(3)">★</div>
+          <div class="star lit" onclick="setStars(4)">★</div>
+          <div class="star lit" onclick="setStars(5)">★</div>
+        </div>
+
+        <div class="post-section-label">WHAT WAS THE OCCASION?</div>
+        <div class="occasion-chips">
+          <div class="occ-chip selected" onclick="toggleOcc(this)">College formal</div>
+          <div class="occ-chip" onclick="toggleOcc(this)">Date night</div>
+          <div class="occ-chip" onclick="toggleOcc(this)">Job interview</div>
+          <div class="occ-chip" onclick="toggleOcc(this)">Birthday dinner</div>
+          <div class="occ-chip" onclick="toggleOcc(this)">Concert</div>
+          <div class="occ-chip" onclick="toggleOcc(this)">Wedding guest</div>
+          <div class="occ-chip" onclick="toggleOcc(this)">Other</div>
+        </div>
+      </div>
+
+      <div style="background:#fff;padding:14px 20px 0;border-top:0.5px solid rgba(0,0,0,0.06)">
+        <div class="post-section-label">ADD PHOTOS (OPTIONAL)</div>
+        <div class="photo-area">
+          <div class="photo-upload" id="photoUpload" onclick="addPhoto()">
+            <div class="photo-icon">◎</div>
+            <div class="photo-label">Tap to add a photo<br><strong>Show how it looked in real life</strong></div>
+          </div>
+          <div class="photo-previews" id="photoPreviews" style="display:none">
+            <div class="photo-preview ph1"><div class="photo-remove" onclick="removePhoto(event)">×</div></div>
+            <div class="photo-preview ph2"><div class="photo-remove" onclick="removePhoto(event)">×</div></div>
+            <div class="photo-preview" style="background:#f0f5f1;border:1px dashed rgba(45,90,63,0.3);width:56px;height:56px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:18px;color:#2d5a3f;cursor:pointer" onclick="addPhoto()">+</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="post-comment-area" style="padding:12px 20px">
+        <div class="post-section-label">YOUR TAKE (OPTIONAL)</div>
+        <textarea class="comment-input" rows="3" placeholder="e.g. 'runs small — size up. photos came out way better than expected. pine was right.'" id="commentInput"></textarea>
+        <div class="comment-hint">Honest reactions only. No one is paying you. That's the whole point.</div>
+      </div>
+
+      <div class="pine-context">
+        <div class="pc-label">◷ PINE'S ORIGINAL REASONING</div>
+        <div class="pc-text">"Navy tone complements gold jewelry. Sequin finish reads formal without overdressing. Delivery confirmed before Thursday."</div>
+      </div>
+
+      <div class="share-settings">
+        <div class="post-section-label" style="padding-top:12px">SHARING SETTINGS</div>
+        <div class="share-row">
+          <div><div class="share-label">Share with people I follow</div><div class="share-sub">Shows up in their friends feed</div></div>
+          <div class="toggle" onclick="this.classList.toggle('off')"><div class="toggle-dot"></div></div>
+        </div>
+        <div class="share-row">
+          <div><div class="share-label">Contribute to community data</div><div class="share-sub">Anonymous — improves recommendations for similar occasions</div></div>
+          <div class="toggle" onclick="this.classList.toggle('off')"><div class="toggle-dot"></div></div>
+        </div>
+        <div class="share-row">
+          <div><div class="share-label">Show on my profile</div><div class="share-sub">Visible to people who follow you</div></div>
+          <div class="toggle" onclick="this.classList.toggle('off')"><div class="toggle-dot"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="post-submit-area">
+      <button class="post-submit-btn" onclick="showScreen('feed',document.querySelectorAll('.tab-btn')[2])">Post — share how it went</button>
+    </div>
+  </div>
+
+  <!-- COMMUNITY FEED -->
+  <div class="screen" id="screen-feed">
+    <div class="feed-screen">
+      <div class="feed-filters">
+        <div class="filter-chip active" onclick="toggleFilter(this)">All occasions</div>
+        <div class="filter-chip" onclick="toggleFilter(this)">College formal</div>
+        <div class="filter-chip" onclick="toggleFilter(this)">Date night</div>
+        <div class="filter-chip" onclick="toggleFilter(this)">Job interview</div>
+        <div class="filter-chip" onclick="toggleFilter(this)">Concert</div>
+        <div class="filter-chip" onclick="toggleFilter(this)">Wedding guest</div>
+      </div>
+
+      <!-- POST 1 -->
+      <div class="feed-post">
+        <div class="fp-header">
+          <div class="fp-av fp-av-e">E</div>
+          <div class="fp-name">Emma Chen</div>
+          <div class="fp-when">2d ago</div>
+        </div>
+        <div class="fp-occasion">PRINCETON FORMAL · APRIL 2026</div>
+        <div class="fp-images">
+          <div class="fp-img-main fi1"></div>
+          <div class="fp-img-side">
+            <div class="fp-img-half fi2"></div>
+            <div class="fp-img-half fi1b"></div>
+          </div>
+        </div>
+        <div class="fp-body">
+          <div class="fp-product">Photo Finish Royal Blue Sequin Maxi Dress</div>
+          <div class="fp-retailer">lulus.com · $89</div>
+          <div class="fp-verdict-row">
+            <span class="fp-verdict fp-kept">kept it</span>
+            <span class="fp-stars">★★★★★</span>
+          </div>
+          <div class="fp-comment">"matched my gold hoops perfectly. photos came out way better than I expected. pine was right — don't overthink it."</div>
+          <div class="fp-pine-context">
+            <div class="fp-pine-label">◷ PINE'S REASONING</div>
+            Navy tone complements gold jewelry. Sequin finish reads formal without overdressing. Delivery before Thursday confirmed.
+          </div>
+          <div class="fp-actions">
+            <span class="fp-action" onclick="this.innerHTML='♡ 8'">♡ 7</span>
+            <span class="fp-action">◎ similar occasion</span>
+            <span class="fp-helpful">helpful?</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST 2 -->
+      <div class="feed-post">
+        <div class="fp-header">
+          <div class="fp-av fp-av-s">S</div>
+          <div class="fp-name">Sarah Kim</div>
+          <div class="fp-when">5d ago</div>
+        </div>
+        <div class="fp-occasion">DATE NIGHT · APRIL 2026</div>
+        <div class="fp-images" style="height:160px">
+          <div class="fp-img-main fi2b"></div>
+        </div>
+        <div class="fp-body">
+          <div class="fp-product">Satin Cowl Slip Dress — Terracotta</div>
+          <div class="fp-retailer">Revolve · $148</div>
+          <div class="fp-verdict-row">
+            <span class="fp-verdict fp-kept">kept it</span>
+            <span class="fp-stars">★★★★</span>
+          </div>
+          <div class="fp-comment">"runs small — size up one. color is exactly as shown. super comfortable but the satin wrinkles easily, bring a steamer."</div>
+          <div class="fp-pine-context">
+            <div class="fp-pine-label">◷ PINE'S REASONING</div>
+            Cowl neckline is relaxed-elegant for evening. Terracotta is a warm neutral that photographs well in low light.
+          </div>
+          <div class="fp-actions">
+            <span class="fp-action" onclick="this.innerHTML='♡ 13'">♡ 12</span>
+            <span class="fp-action">◎ similar occasion</span>
+            <span class="fp-helpful">helpful?</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST 3 -->
+      <div class="feed-post">
+        <div class="fp-header">
+          <div class="fp-av fp-av-m">M</div>
+          <div class="fp-name">Maya Patel</div>
+          <div class="fp-when">1w ago</div>
+        </div>
+        <div class="fp-occasion">JOB INTERVIEW · APRIL 2026</div>
+        <div class="fp-images" style="height:160px">
+          <div class="fp-img-main fi3"></div>
+          <div class="fp-img-side">
+            <div class="fp-img-half fi3b"></div>
+            <div class="fp-img-half fi3"></div>
+          </div>
+        </div>
+        <div class="fp-body">
+          <div class="fp-product">Structured Crepe Blazer Dress — Forest</div>
+          <div class="fp-retailer">& Other Stories · $175</div>
+          <div class="fp-verdict-row">
+            <span class="fp-verdict fp-kept">kept it</span>
+            <span class="fp-stars">★★★★★</span>
+          </div>
+          <div class="fp-comment">"got the job. genuinely crediting pine. the color was bolder than i expected but it stood out in the best way."</div>
+          <div class="fp-pine-context">
+            <div class="fp-pine-label">◷ PINE'S REASONING</div>
+            Structured silhouette conveys authority. Forest green is distinctive without being unconventional in a creative office setting.
+          </div>
+          <div class="fp-actions">
+            <span class="fp-action" onclick="this.innerHTML='♡ 24'">♡ 23</span>
+            <span class="fp-action">◎ similar occasion</span>
+            <span class="fp-helpful">helpful?</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="chatbar">
+    <div class="ctabs">
+      <span class="ctab">⊙ EXPLORE</span>
+      <span class="ctab">☆ CURATED</span>
+      <span class="ctab active">♡ COMMUNITY</span>
+      <span class="ctab">○ PROFILE</span>
+    </div>
+    <div class="mic-btn">◉</div>
+    <div class="cinput">Tell Pine what you're looking for…</div>
+  </div>
+</div>
+
+<script>
+function showScreen(id,btn){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+function selectKR(type){
+  document.getElementById('keepBtn').className='kr-btn'+(type==='keep'?' selected-keep':'');
+  document.getElementById('returnBtn').className='kr-btn'+(type==='return'?' selected-return':'');
+}
+function setStars(n){
+  document.querySelectorAll('.star').forEach((s,i)=>{
+    s.classList.toggle('lit',i<n);
+  });
+}
+function toggleOcc(el){
+  document.querySelectorAll('.occ-chip').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+let photos=false;
+function addPhoto(){
+  photos=true;
+  document.getElementById('photoUpload').style.display='none';
+  document.getElementById('photoPreviews').style.display='flex';
+}
+function removePhoto(e){
+  e.stopPropagation();
+  photos=false;
+  document.getElementById('photoUpload').style.display='block';
+  document.getElementById('photoPreviews').style.display='none';
+}
+function toggleFilter(el){
+  document.querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
