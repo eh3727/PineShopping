@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pine:#2d5a3f;--pine-light:#e8f0ea;--pine-mid:#8cb89c;
+  --cream:#F5F0E8;--white:#fff;--gray:#f0ede6;
+  --text:#1a1a1a;--muted:#888;--border:rgba(0,0,0,0.08);
+  --shadow:0 4px 24px rgba(0,0,0,0.12);
+}
+body{font-family:'DM Sans',sans-serif;background:#e8e4dc;min-height:100vh;padding:16px}
+
+/* BROWSER CHROME */
+.browser{background:#fff;border-radius:12px;overflow:hidden;box-shadow:var(--shadow);max-width:900px;margin:0 auto}
+.browser-bar{background:#f5f5f5;padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #e0e0e0}
+.browser-dots{display:flex;gap:6px}
+.dot{width:12px;height:12px;border-radius:50%}
+.dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+.address-bar{flex:1;background:#fff;border:1px solid #ddd;border-radius:6px;padding:5px 12px;font-size:12px;color:#555;display:flex;align-items:center;gap:6px}
+.lock-icon{color:#2d5a3f;font-size:11px}
+
+/* EXTENSION ICON in toolbar */
+.ext-icons{display:flex;align-items:center;gap:8px}
+.pine-ext-icon{width:28px;height:28px;border-radius:6px;background:var(--pine);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;position:relative}
+.pine-ext-icon:hover{opacity:0.85;transform:scale(1.05)}
+.pine-ext-icon svg{width:16px;height:16px;fill:#fff}
+.ext-badge{position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;background:#e85d24;border:2px solid #f5f5f5;font-size:8px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:500}
+
+/* PAGE CONTENT WRAPPER */
+.page-content{position:relative;overflow:hidden}
+
+/* AMAZON-LIKE PAGE */
+.amazon-page{padding:20px 24px;background:#fff;min-height:480px}
+.amazon-header{display:flex;align-items:center;gap:14px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #e0e0e0}
+.amazon-logo{font-size:22px;font-weight:700;color:#f90;letter-spacing:-0.5px}
+.amazon-search{flex:1;display:flex;border:2px solid #f90;border-radius:4px;overflow:hidden}
+.amazon-search input{flex:1;padding:7px 12px;font-size:13px;border:none;outline:none;font-family:'DM Sans',sans-serif}
+.amazon-search-btn{background:#f90;padding:7px 14px;font-size:12px;border:none;cursor:pointer;font-weight:500}
+.amazon-nav{font-size:11px;color:#555;display:flex;gap:16px;margin-bottom:16px}
+.breadcrumb{font-size:11px;color:#555;margin-bottom:14px}
+.breadcrumb span{color:#007185}
+.product-layout{display:grid;grid-template-columns:280px 1fr;gap:24px}
+.product-images{display:flex;flex-direction:column;gap:6px}
+.main-image{width:100%;height:240px;border-radius:4px;border:1px solid #e0e0e0;overflow:hidden;position:relative}
+.main-image-bg{width:100%;height:100%;background:linear-gradient(135deg,#2a3968,#1a2548);display:flex;align-items:center;justify-content:center}
+.main-image-label{color:rgba(255,255,255,0.4);font-size:11px;letter-spacing:1px}
+.thumb-row{display:flex;gap:6px}
+.thumb{width:48px;height:48px;border-radius:3px;border:1px solid #e0e0e0;background:linear-gradient(135deg,#3a4f8a,#2a3968);cursor:pointer}
+.product-details{padding-top:4px}
+.product-brand{font-size:11px;color:#007185;margin-bottom:4px}
+.product-title{font-size:16px;font-weight:500;line-height:1.4;color:#0f1111;margin-bottom:8px}
+.stars{display:flex;align-items:center;gap:4px;margin-bottom:10px;font-size:12px;color:#555}
+.stars-fill{color:#f90;font-size:13px}
+.price-block{margin-bottom:12px}
+.price-main{font-size:22px;font-weight:400;color:#0f1111}
+.price-main sup{font-size:13px;vertical-align:super}
+.prime-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:#00a8e1;margin-top:2px}
+.delivery-info{font-size:12px;color:#0f1111;margin-bottom:10px}
+.delivery-info span{color:#007600;font-weight:500}
+.size-section{margin-bottom:12px}
+.size-label{font-size:12px;color:#0f1111;margin-bottom:6px}
+.size-options{display:flex;gap:6px;flex-wrap:wrap}
+.size-opt{width:36px;height:32px;border:1px solid #888;border-radius:3px;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s}
+.size-opt:hover{border-color:#f90}
+.size-opt.selected{border:2px solid #f90;background:#fffbf2}
+.add-to-cart{width:100%;background:#ffd814;border:none;border-radius:20px;padding:9px;font-size:13px;font-weight:500;cursor:pointer;margin-bottom:8px;font-family:'DM Sans',sans-serif}
+.buy-now{width:100%;background:#ffa41c;border:none;border-radius:20px;padding:9px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.secure{font-size:11px;color:#555;text-align:center;margin-top:6px}
+.reviews-section{margin-top:16px;padding-top:12px;border-top:1px solid #e0e0e0}
+.reviews-title{font-size:13px;font-weight:500;margin-bottom:8px}
+.review-item{font-size:11px;color:#555;margin-bottom:6px;line-height:1.4}
+
+/* PINE EXTENSION SIDEBAR */
+.pine-sidebar{position:absolute;top:0;right:0;width:0;height:100%;background:var(--cream);border-left:1px solid rgba(45,90,63,0.15);overflow:hidden;transition:width 0.35s cubic-bezier(0.4,0,0.2,1);z-index:10;display:flex;flex-direction:column}
+.pine-sidebar.open{width:300px}
+.sidebar-inner{width:300px;height:100%;display:flex;flex-direction:column;overflow-y:auto}
+
+/* Sidebar header */
+.sb-header{padding:14px 16px 10px;border-bottom:0.5px solid rgba(45,90,63,0.12);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.sb-logo{display:flex;align-items:center;gap:6px;font-family:'DM Serif Display',serif;font-size:15px;color:var(--pine)}
+.sb-logo-icon{width:22px;height:22px;border-radius:5px;background:var(--pine);display:flex;align-items:center;justify-content:center}
+.sb-close{background:none;border:none;font-size:16px;color:var(--muted);cursor:pointer;padding:2px 6px;border-radius:4px}
+.sb-close:hover{background:rgba(0,0,0,0.06)}
+
+/* Product snapshot */
+.sb-product{display:flex;gap:10px;padding:12px 16px;border-bottom:0.5px solid rgba(45,90,63,0.1);flex-shrink:0}
+.sb-thumb{width:44px;height:52px;border-radius:4px;background:linear-gradient(135deg,#2a3968,#1a2548);flex-shrink:0}
+.sb-product-info{flex:1}
+.sb-product-name{font-size:11px;font-weight:500;color:var(--text);line-height:1.35;margin-bottom:2px}
+.sb-product-price{font-size:13px;font-weight:500;color:var(--pine)}
+.sb-product-retailer{font-size:10px;color:var(--muted)}
+
+/* Pine analysis */
+.sb-section{padding:12px 16px;border-bottom:0.5px solid rgba(45,90,63,0.08)}
+.sb-section-title{font-size:9px;letter-spacing:1.5px;color:var(--pine);margin-bottom:8px}
+
+/* Signal rows */
+.signal-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.signal-icon{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;flex-shrink:0}
+.sig-good{background:#e8f0ea;color:#2d5a3f}
+.sig-warn{background:#fef3e2;color:#b07010}
+.sig-bad{background:#fce8e8;color:#c44}
+.signal-text{font-size:11px;color:var(--text);flex:1;line-height:1.35}
+.signal-sub{font-size:9px;color:var(--muted);margin-top:1px}
+
+/* Price history */
+.price-history{background:#fff;border-radius:6px;padding:10px;border:0.5px solid rgba(0,0,0,0.06)}
+.ph-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;font-size:11px}
+.ph-label{color:var(--muted)}
+.ph-value{font-weight:500;color:var(--text)}
+.ph-good{color:#2d5a3f}
+.ph-warn{color:#b07010}
+.price-bar{height:4px;border-radius:2px;background:#e0e0e0;margin-top:6px;overflow:hidden}
+.price-fill{height:100%;background:var(--pine);border-radius:2px;width:65%}
+
+/* Alternatives */
+.alt-card{background:#fff;border-radius:6px;padding:10px;border:0.5px solid rgba(0,0,0,0.06);display:flex;gap:8px;margin-bottom:6px;cursor:pointer;transition:border-color 0.15s}
+.alt-card:hover{border-color:var(--pine)}
+.alt-card.best{border-color:var(--pine);border-width:1.5px}
+.alt-thumb{width:40px;height:48px;border-radius:4px;flex-shrink:0}
+.at1{background:linear-gradient(135deg,#6e8ec4,#4a6a9a)}
+.at2{background:linear-gradient(135deg,#9a6ec4,#7a4ea4)}
+.alt-info{flex:1}
+.alt-name{font-size:10px;font-weight:500;color:var(--text);line-height:1.3;margin-bottom:2px}
+.alt-price{font-size:12px;font-weight:500;color:var(--pine)}
+.alt-badge{font-size:8px;background:var(--pine);color:#fff;padding:1px 5px;border-radius:3px;display:inline-block;margin-top:2px}
+.alt-retailer{font-size:9px;color:var(--muted);margin-top:1px}
+.alt-reason{font-size:9px;color:#2d5a3f;font-style:italic;margin-top:2px}
+
+/* Pine verdict */
+.pine-verdict{background:var(--pine);border-radius:8px;padding:12px;margin:0 16px 12px;flex-shrink:0}
+.verdict-label{font-size:9px;letter-spacing:1.3px;color:rgba(255,255,255,0.6);margin-bottom:4px}
+.verdict-text{font-size:12px;color:#fff;line-height:1.5;margin-bottom:10px}
+.verdict-btns{display:flex;gap:6px}
+.btn-get{flex:1;background:#fff;color:var(--pine);border:none;padding:7px;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-alt{flex:1;background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.3);padding:7px;border-radius:5px;font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* CONVERSATION MODE */
+.pine-conversation{position:absolute;top:0;left:0;right:0;bottom:0;background:var(--cream);z-index:20;display:none;flex-direction:column}
+.pine-conversation.active{display:flex}
+.conv-header{padding:14px 18px;border-bottom:0.5px solid rgba(45,90,63,0.12);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.conv-back{background:none;border:none;color:var(--pine);font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.conv-title{font-family:'DM Serif Display',serif;font-size:15px;color:var(--pine)}
+.conv-messages{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:85%;font-size:12px;line-height:1.5;padding:9px 12px;border-radius:10px}
+.msg-pine{background:#fff;border:0.5px solid rgba(45,90,63,0.12);color:var(--text);align-self:flex-start;border-radius:2px 10px 10px 10px}
+.msg-user{background:var(--pine);color:#fff;align-self:flex-end;border-radius:10px 2px 10px 10px}
+.msg-name{font-size:9px;letter-spacing:1px;color:var(--muted);margin-bottom:3px}
+.typing{display:flex;gap:3px;padding:10px 14px;background:#fff;border-radius:2px 10px 10px 10px;align-self:flex-start;border:0.5px solid rgba(45,90,63,0.12)}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--pine-mid);animation:bounce 1.2s infinite}
+.typing-dot:nth-child(2){animation-delay:0.2s}
+.typing-dot:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+.conv-input-area{padding:12px 16px;border-top:0.5px solid rgba(45,90,63,0.1);display:flex;gap:8px;flex-shrink:0}
+.conv-input{flex:1;background:#fff;border:0.5px solid rgba(0,0,0,0.1);border-radius:20px;padding:8px 14px;font-size:12px;outline:none;font-family:'DM Sans',sans-serif}
+.conv-input:focus{border-color:var(--pine)}
+.conv-send{background:var(--pine);color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+
+/* POPUP from ext icon */
+.pine-popup{position:absolute;top:44px;right:10px;width:260px;background:#fff;border-radius:10px;border:0.5px solid rgba(0,0,0,0.1);box-shadow:0 8px 32px rgba(0,0,0,0.15);z-index:30;display:none;overflow:hidden}
+.pine-popup.show{display:block;animation:popIn 0.2s ease}
+@keyframes popIn{from{opacity:0;transform:translateY(-8px) scale(0.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.popup-header{background:var(--pine);padding:12px 14px;display:flex;align-items:center;gap:8px}
+.popup-logo{font-family:'DM Serif Display',serif;font-size:14px;color:#fff}
+.popup-sub{font-size:10px;color:rgba(255,255,255,0.7);margin-top:1px}
+.popup-body{padding:12px 14px}
+.popup-item{display:flex;align-items:flex-start;gap:8px;padding:6px 0;border-bottom:0.5px solid rgba(0,0,0,0.06)}
+.popup-item:last-child{border-bottom:none}
+.popup-dot{width:6px;height:6px;border-radius:50%;background:var(--pine);margin-top:5px;flex-shrink:0}
+.popup-text{font-size:11px;color:#333;line-height:1.4}
+.popup-text strong{color:var(--pine)}
+.popup-cta{width:100%;background:var(--pine);color:#fff;border:none;padding:10px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;margin-top:8px;font-family:'DM Sans',sans-serif}
+
+/* TABS */
+.tab-bar{display:flex;border-bottom:0.5px solid rgba(45,90,63,0.1);flex-shrink:0}
+.tab{flex:1;padding:8px 6px;font-size:10px;text-align:center;cursor:pointer;color:var(--muted);border-bottom:2px solid transparent;transition:all 0.15s;letter-spacing:0.5px}
+.tab.active{color:var(--pine);border-bottom-color:var(--pine);font-weight:500}
+
+/* Scroll */
+.sb-scrollable{flex:1;overflow-y:auto}
+</style>
+</head>
+<body>
+
+<div class="browser">
+  <!-- Browser bar -->
+  <div class="browser-bar">
+    <div class="browser-dots">
+      <div class="dot dot-r"></div>
+      <div class="dot dot-y"></div>
+      <div class="dot dot-g"></div>
+    </div>
+    <div class="address-bar">
+      <span class="lock-icon">🔒</span>
+      amazon.com/dp/B09NK3RVG8/ref=sr_1_3?size=M
+    </div>
+    <div class="ext-icons">
+      <div class="pine-ext-icon" id="extIcon" onclick="togglePopup()" title="Pine Shopping Assistant">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.5 2 6 5 6 8c0 2 1 3.5 2.5 5L12 22l3.5-9C17 11.5 18 10 18 8c0-3-2.5-6-6-6zm0 8c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z"/></svg>
+        <div class="ext-badge" id="extBadge">3</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup -->
+  <div class="pine-popup" id="pinePopup">
+    <div class="popup-header">
+      <div>
+        <div class="popup-logo">◈ Pine</div>
+        <div class="popup-sub">Shopping intelligence active</div>
+      </div>
+    </div>
+    <div class="popup-body">
+      <div class="popup-item">
+        <div class="popup-dot"></div>
+        <div class="popup-text"><strong>Price alert:</strong> This item was $24 lower 6 weeks ago</div>
+      </div>
+      <div class="popup-item">
+        <div class="popup-dot"></div>
+        <div class="popup-text"><strong>Better match found:</strong> 2 products score higher for your stated constraints</div>
+      </div>
+      <div class="popup-item">
+        <div class="popup-dot"></div>
+        <div class="popup-text"><strong>Social signal:</strong> Emma bought a similar dress for her formal — kept it, 5★</div>
+      </div>
+      <button class="popup-cta" onclick="openSidebar()">Open Pine analysis →</button>
+    </div>
+  </div>
+
+  <!-- Page content area -->
+  <div class="page-content">
+
+    <!-- Amazon product page -->
+    <div class="amazon-page" id="amazonPage">
+      <div class="amazon-header">
+        <div class="amazon-logo">amazon</div>
+        <div class="amazon-search">
+          <input value="navy formal dress under $200">
+          <button class="amazon-search-btn">🔍</button>
+        </div>
+      </div>
+      <div class="breadcrumb">Clothing → Women → Dresses → <span>Formal</span></div>
+
+      <div class="product-layout">
+        <div>
+          <div class="main-image">
+            <div class="main-image-bg">
+              <span class="main-image-label">PRODUCT IMAGE</span>
+            </div>
+          </div>
+          <div class="thumb-row">
+            <div class="thumb"></div>
+            <div class="thumb" style="background:linear-gradient(135deg,#4a6a9a,#2a3968)"></div>
+            <div class="thumb" style="background:linear-gradient(135deg,#1a2548,#0f1530)"></div>
+          </div>
+        </div>
+
+        <div class="product-details">
+          <div class="product-brand">LULUS</div>
+          <div class="product-title">Photo Finish Royal Blue Sequin Lace-Up Maxi Dress — Women's Formal Occasion</div>
+          <div class="stars">
+            <span class="stars-fill">★★★★</span>
+            <span>4.2 (1,847 ratings) | 230+ bought last month</span>
+          </div>
+          <div class="price-block">
+            <div class="price-main"><sup>$</sup>89<sup>.00</sup></div>
+            <div class="prime-badge">✓ Prime — FREE delivery</div>
+          </div>
+          <div class="delivery-info"><span>Arrives Thursday</span> if ordered in 3h 24m</div>
+          <div class="size-section">
+            <div class="size-label">Size: <strong>M</strong></div>
+            <div class="size-options">
+              <div class="size-opt">XS</div>
+              <div class="size-opt">S</div>
+              <div class="size-opt selected">M</div>
+              <div class="size-opt">L</div>
+              <div class="size-opt">XL</div>
+            </div>
+          </div>
+          <button class="add-to-cart">Add to Cart</button>
+          <button class="buy-now">Buy Now</button>
+          <div class="secure">🔒 Secure transaction</div>
+          <div class="reviews-section">
+            <div class="reviews-title">Top reviews</div>
+            <div class="review-item">★★★★★ "Perfect for my formal! The color is beautiful and it arrived 2 days early." — Sarah M.</div>
+            <div class="review-item">★★★☆☆ "Runs small — size up. But the quality is good for the price." — Jessica T.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pine sidebar -->
+    <div class="pine-sidebar" id="pineSidebar">
+      <div class="sidebar-inner">
+        <div class="sb-header">
+          <div class="sb-logo">
+            <div class="sb-logo-icon">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M12 2C8.5 2 6 5 6 8c0 2 1 3.5 2.5 5L12 22l3.5-9C17 11.5 18 10 18 8c0-3-2.5-6-6-6z"/></svg>
+            </div>
+            Pine analysis
+          </div>
+          <button class="sb-close" onclick="closeSidebar()">×</button>
+        </div>
+
+        <div class="sb-product">
+          <div class="sb-thumb"></div>
+          <div class="sb-product-info">
+            <div class="sb-product-name">Photo Finish Royal Blue Sequin Maxi Dress</div>
+            <div class="sb-product-price">$89.00</div>
+            <div class="sb-product-retailer">amazon.com · currently viewing</div>
+          </div>
+        </div>
+
+        <div class="tab-bar">
+          <div class="tab active" onclick="showTab('analysis',this)">Analysis</div>
+          <div class="tab" onclick="showTab('alternatives',this)">Alternatives</div>
+          <div class="tab" onclick="showTab('social',this)">Social</div>
+        </div>
+
+        <div class="sb-scrollable">
+
+          <!-- ANALYSIS TAB -->
+          <div id="tab-analysis">
+            <div class="sb-section">
+              <div class="sb-section-title">PINE SIGNALS</div>
+              <div class="signal-row">
+                <div class="signal-icon sig-warn">⚠</div>
+                <div class="signal-text">
+                  Price is above historical average
+                  <div class="signal-sub">Was $65 six weeks ago · likely to drop</div>
+                </div>
+              </div>
+              <div class="signal-row">
+                <div class="signal-icon sig-good">✓</div>
+                <div class="signal-text">
+                  Arrives before your deadline
+                  <div class="signal-sub">Thursday delivery confirmed · size M in stock</div>
+                </div>
+              </div>
+              <div class="signal-row">
+                <div class="signal-icon sig-warn">i</div>
+                <div class="signal-text">
+                  Reviews mention sizing runs small
+                  <div class="signal-sub">14 of 47 reviews mention size up</div>
+                </div>
+              </div>
+              <div class="signal-row">
+                <div class="signal-icon sig-good">✓</div>
+                <div class="signal-text">
+                  Navy complements gold jewelry
+                  <div class="signal-sub">Matches your stated accessory constraint</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sb-section">
+              <div class="sb-section-title">PRICE HISTORY</div>
+              <div class="price-history">
+                <div class="ph-row"><span class="ph-label">Current</span><span class="ph-value ph-warn">$89.00</span></div>
+                <div class="ph-row"><span class="ph-label">6 weeks ago</span><span class="ph-value ph-good">$65.00</span></div>
+                <div class="ph-row"><span class="ph-label">90-day low</span><span class="ph-value ph-good">$59.00</span></div>
+                <div class="ph-row"><span class="ph-label">90-day avg</span><span class="ph-value">$74.00</span></div>
+                <div class="price-bar"><div class="price-fill"></div></div>
+                <div style="font-size:9px;color:var(--muted);margin-top:4px">Currently at 65% of 90-day range</div>
+              </div>
+            </div>
+
+            <div class="sb-section">
+              <div class="sb-section-title">PINE'S TAKE</div>
+              <div style="font-size:11px;color:var(--text);line-height:1.6;font-style:italic">"This dress matches your constraints but is currently overpriced versus its historical average. Pine found 2 alternatives that score higher and cost less. Size up if you order this one."</div>
+            </div>
+          </div>
+
+          <!-- ALTERNATIVES TAB -->
+          <div id="tab-alternatives" style="display:none;padding:12px 16px">
+            <div style="font-size:9px;letter-spacing:1.5px;color:var(--pine);margin-bottom:10px">PINE FOUND BETTER OPTIONS</div>
+
+            <div class="alt-card best">
+              <div class="alt-thumb at1"></div>
+              <div class="alt-info">
+                <div class="alt-name">Satin Halter Maxi — Midnight Navy</div>
+                <div class="alt-price">$67.00 <span style="font-size:9px;color:var(--muted);text-decoration:line-through">$89</span></div>
+                <div class="alt-badge">Pine's top pick</div>
+                <div class="alt-retailer">revolve.com · arrives Wednesday</div>
+                <div class="alt-reason">Better price · true to size · similar occasion reviews</div>
+              </div>
+            </div>
+
+            <div class="alt-card">
+              <div class="alt-thumb at2"></div>
+              <div class="alt-info">
+                <div class="alt-name">Embellished Sweetheart Gown — Deep Blue</div>
+                <div class="alt-price">$79.00</div>
+                <div class="alt-retailer">nordstrom.com · arrives Thursday</div>
+                <div class="alt-reason">Higher formal rating · within budget</div>
+              </div>
+            </div>
+
+            <div style="font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5">Pine searched 847 products matching your constraints. These 2 scored higher on price, occasion match, and delivery.</div>
+
+            <button onclick="openConversation()" style="width:100%;margin-top:12px;background:var(--pine-light);color:var(--pine);border:none;padding:9px;border-radius:6px;font-size:11px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif">Refine with Pine conversation →</button>
+          </div>
+
+          <!-- SOCIAL TAB -->
+          <div id="tab-social" style="display:none;padding:12px 16px">
+            <div style="font-size:9px;letter-spacing:1.5px;color:var(--pine);margin-bottom:10px">FROM PEOPLE YOU FOLLOW</div>
+
+            <div style="background:#fff;border-radius:7px;padding:10px;border:0.5px solid rgba(0,0,0,0.07);margin-bottom:8px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                <div style="width:24px;height:24px;border-radius:50%;background:#c48a6e;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:#fff">E</div>
+                <div style="font-size:11px;font-weight:500">Emma Chen</div>
+                <div style="font-size:9px;color:var(--muted);margin-left:auto">2d ago</div>
+              </div>
+              <div style="font-size:9px;letter-spacing:1px;color:var(--pine);margin-bottom:3px">PRINCETON FORMAL · SIMILAR DRESS</div>
+              <div style="font-size:10px;font-style:italic;color:#444;line-height:1.4">"matched my gold hoops perfectly — pine was right"</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
+                <span style="font-size:9px;background:#e8f0ea;color:#2d5a3f;padding:2px 7px;border-radius:3px;font-weight:500">kept it</span>
+                <span style="font-size:9px;color:#c4a050">★★★★★</span>
+              </div>
+            </div>
+
+            <div style="background:#fff;border-radius:7px;padding:10px;border:0.5px solid rgba(0,0,0,0.07);margin-bottom:8px">
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+                <div style="width:24px;height:24px;border-radius:50%;background:#6e8ec4;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500;color:#fff">S</div>
+                <div style="font-size:11px;font-weight:500">Sarah Kim</div>
+                <div style="font-size:9px;color:var(--muted);margin-left:auto">1w ago</div>
+              </div>
+              <div style="font-size:9px;letter-spacing:1px;color:var(--pine);margin-bottom:3px">SPRING FORMAL · SAME PRODUCT</div>
+              <div style="font-size:10px;font-style:italic;color:#444;line-height:1.4">"size up — runs small. gorgeous though"</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
+                <span style="font-size:9px;background:#e8f0ea;color:#2d5a3f;padding:2px 7px;border-radius:3px;font-weight:500">kept it</span>
+                <span style="font-size:9px;color:#c4a050">★★★★</span>
+              </div>
+            </div>
+
+            <div style="font-size:10px;color:var(--muted);line-height:1.5">2 people you follow bought this or similar items for comparable occasions. Both kept it.</div>
+          </div>
+
+        </div>
+
+        <!-- Verdict always visible at bottom -->
+        <div class="pine-verdict">
+          <div class="verdict-label">◷ PINE'S VERDICT</div>
+          <div class="verdict-text">Good choice but overpriced right now. Pine found a better option at $67 — same occasion, better price, true to size.</div>
+          <div class="verdict-btns">
+            <button class="btn-get" onclick="showTab('alternatives',document.querySelectorAll('.tab')[1])">See Pine's pick</button>
+            <button class="btn-alt" onclick="openConversation()">Ask Pine</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pine conversation overlay -->
+    <div class="pine-conversation" id="pineConv">
+      <div class="conv-header">
+        <button class="conv-back" onclick="closeConversation()">← Back</button>
+        <div class="conv-title">◈ Pine</div>
+        <div style="width:40px"></div>
+      </div>
+      <div class="conv-messages" id="convMessages">
+        <div class="msg-name">PINE</div>
+        <div class="msg msg-pine">I can see you're looking at the Photo Finish Royal Blue Sequin Dress on Amazon at $89. I found it $22 cheaper elsewhere and noticed the price is above its historical average. What would you like to know?</div>
+      </div>
+      <div class="conv-input-area">
+        <input class="conv-input" id="convInput" placeholder="Ask Pine anything about this product..." onkeydown="if(event.key==='Enter')sendMessage()">
+        <button class="conv-send" onclick="sendMessage()">↑</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let sidebarOpen = false;
+let popupOpen = false;
+let typingTimeout;
+
+function togglePopup(){
+  popupOpen = !popupOpen;
+  document.getElementById('pinePopup').classList.toggle('show', popupOpen);
+}
+
+function openSidebar(){
+  document.getElementById('pinePopup').classList.remove('show');
+  popupOpen = false;
+  sidebarOpen = true;
+  document.getElementById('pineSidebar').classList.add('open');
+  document.getElementById('amazonPage').style.marginRight = '300px';
+  document.getElementById('extBadge').style.display = 'none';
+}
+
+function closeSidebar(){
+  sidebarOpen = false;
+  document.getElementById('pineSidebar').classList.remove('open');
+  document.getElementById('amazonPage').style.marginRight = '0';
+}
+
+function showTab(name, el){
+  document.querySelectorAll('[id^="tab-"]').forEach(t => t.style.display='none');
+  document.getElementById('tab-'+name).style.display='block';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  if(el) el.classList.add('active');
+}
+
+function openConversation(){
+  document.getElementById('pineConv').classList.add('active');
+}
+
+function closeConversation(){
+  document.getElementById('pineConv').classList.remove('active');
+}
+
+const responses = {
+  default: ["I checked this against your preference history and the community data. The main concerns are the current price spike and the sizing — both reviewers and people you follow say size up.", "Good question. Pine's recommendation would be the Satin Halter Maxi from Revolve at $67 — it scores higher on price, delivery timeline, and has better sizing reviews for formal occasions.", "Based on your past purchases Pine knows you prefer navy and jewel tones. This one fits that profile. The only flag is the current price — if you can wait a few weeks it may drop back toward $65.", "Pine checked all retailers. The same product isn't meaningfully cheaper elsewhere right now. The Revolve alternative is genuinely a better option at $67 with Thursday delivery."],
+  idx: 0
+};
+
+function sendMessage(){
+  const input = document.getElementById('convInput');
+  const msg = input.value.trim();
+  if(!msg) return;
+  input.value = '';
+  const msgs = document.getElementById('convMessages');
+  msgs.insertAdjacentHTML('beforeend', `<div class="msg msg-user">${msg}</div>`);
+  const typing = document.createElement('div');
+  typing.className = 'typing';
+  typing.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+  msgs.appendChild(typing);
+  msgs.scrollTop = msgs.scrollHeight;
+  setTimeout(()=>{
+    typing.remove();
+    const reply = responses.default[responses.idx % responses.default.length];
+    responses.idx++;
+    msgs.insertAdjacentHTML('beforeend', `<div style="margin-top:2px"><div class="msg-name">PINE</div><div class="msg msg-pine">${reply}</div></div>`);
+    msgs.scrollTop = msgs.scrollHeight;
+  }, 1400);
+}
+
+document.addEventListener('click', e => {
+  if(popupOpen && !e.target.closest('#pinePopup') && !e.target.closest('#extIcon')){
+    document.getElementById('pinePopup').classList.remove('show');
+    popupOpen = false;
+  }
+});
+</script>
+</body>
+</html>
